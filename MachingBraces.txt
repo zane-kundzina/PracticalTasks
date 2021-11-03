@@ -1,0 +1,128 @@
+using System;
+using System.Collections.Generic;
+					
+public class MachingBraces
+{
+	public static void Main()
+	{
+		    
+    // Given a string containing brackets [], braces {}, parentheses (), or any combination thereof, verify that any and all pairs are matched and nested correctly.
+    // 1st part - check if the number of left brackets match the number of right brackets
+    // 2nd part - check if the brackets are located correctly
+    // Ex. {text[texthere]} - correct
+    // {text[texthere}] - not correct
+
+    string text = "{text[texthere)]}";
+		
+    int leftBrackets = 0;
+    int leftBraces = 0;
+    int leftParenthesis = 0;
+    
+    int rightBrackets = 0;
+    int rightBraces = 0;
+    int rightParenthesis = 0;
+    
+    //Console.WriteLine ("Please, enter the text containing brackets, braces and parenthesis:");
+    //string text = Console.ReadLine();
+    
+		
+// 1st part - check if the number of left brackets match the number of right brackets
+	
+	Console.WriteLine("1st check - if the number of left brackets match the number of right brackets.");
+		
+	Dictionary<char, char> pairs = new Dictionary<char, char> 
+    {
+        { '(', ')' },
+        { '[', ']' },
+        { '{', '}' },
+    };
+		
+    if (text.Length == 0) 
+    { 
+        Console.WriteLine("There is no text to check.");
+    }
+    else 
+    {	
+        foreach (char ch in text)
+        {
+			if (ch == '{')
+				leftBraces++;
+			else if (ch == '[')
+				leftBrackets++;
+			else if (ch == '(')
+				leftParenthesis++;
+			else if (ch == '}')
+				rightBraces++;
+			else if (ch == ']')
+				rightBrackets++;
+			else if (ch == ')')
+				rightParenthesis++;			
+        }
+	}
+		
+	if(leftBraces == rightBraces && leftBrackets == rightBrackets && leftParenthesis == rightParenthesis)
+            {
+              Console.WriteLine("For text \" {0} \" the number of opening and closing brackets, braces and parenthesis IS CORRECT.", text);
+            }
+    else
+            {
+              Console.WriteLine("For text \" {0} \" the number of opening and closing brackets, braces and parenthesis is NOT CORRECT.", text);
+            }
+		
+		Console.WriteLine();
+	
+// 2nd part - check if the brackets are located correctly
+
+	Console.WriteLine("2nd check - if the brackets are located correctly.");
+	
+	Stack<char> stack = new Stack<char>();
+		
+	if (text.Length == 0) 
+		{ 
+		  Console.WriteLine("There is no text to check.");
+		  
+		}
+    else 
+    {
+	    foreach (char ch in text)
+        {			
+            if(pairs.ContainsKey(ch))
+			{
+                stack.Push(ch);
+            }
+		}
+		
+		Console.Write("Stack created:");
+		foreach (char ch in stack)
+        {			
+            Console.Write(ch + " ");
+		}
+		Console.WriteLine();
+		
+		
+		foreach (char ch in text)
+		{  					   
+           var value = ch;
+			
+			if(stack.Count != 0 && pairs.TryGetValue(stack.Pop(), out value))
+			   {
+				// pairs match
+			   }
+			else
+			   {
+				   Console.WriteLine("For text \"{0}\" brackets/braces/parenthesis are NOT in balance.", text);
+				   stack.Push('.');
+				   break;
+			   }
+			
+			
+		}	
+     }
+		
+		if (stack.Count == 0)
+		{
+			Console.WriteLine("For text \"{0}\" brackets/braces/parenthesis ARE in BALANCE.", text);
+		}
+		
+  }	
+}
